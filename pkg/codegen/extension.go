@@ -22,7 +22,17 @@ const (
 	extEnumVarNames      = "x-enum-varnames"
 	extEnumNames         = "x-enumNames"
 	extDeprecationReason = "x-deprecated-reason"
+	// extGoRuterGroup is used to mark tag as a router group.
+	extGoRouterGroup = "x-go-router-group"
 )
+
+func extParseGoRouterGroup(extPropValue interface{}) (bool, error) {
+	goRouterGroup, ok := extPropValue.(bool)
+	if !ok {
+		return false, fmt.Errorf("failed to convert type: %T", extPropValue)
+	}
+	return goRouterGroup, nil
+}
 
 func extString(extPropValue interface{}) (string, error) {
 	str, ok := extPropValue.(string)

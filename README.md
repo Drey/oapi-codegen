@@ -807,6 +807,71 @@ which help you to use the various OpenAPI 3 Authentication mechanism.
       End   *openapi_types.Date `json:"end,omitempty"`
     }
     ```
+- `x-go-router-group`: marks tag as a router group. It allows you to combine multiple operations
+  to specific route group during templating.
+
+    ```yaml
+    tags:
+      - name: greeting
+        description: Combines multiple operations to a route group
+        x-go-router-group: true
+    ```
+
+    Route groups are available in templates by using `routerGroups` global variable:
+
+    ```tmpl
+    ...
+
+    type ServerMiddlewareInterface interface {
+    {{range routerGroups -}}
+    // Provides middlewares for operation definitions tagged by {{.Name}} tag.
+    Get{{.Name | title}}Middleware() []func(http.Handler) http.Handler
+    {{end}}
+    }
+    
+    ...
+
+    {{range routerGroups}}
+    {{- if ne (len .OperationDefinitions) 0 }}
+    // Operation definitions grouped by {{.Name}} tag.
+    r.Group(func(r chi.Router) {
+    if smi != nil {
+    for _, middleware := range smi.Get{{.Name | title}}Middleware() {
+        r.Use(middleware)
+    }
+    }
+        {{- range .OperationDefinitions}}
+        r.{{.Method | lower | title }}(options.BaseURL+"{{.Path | swaggerUriToChiUri}}", wrapper.{{.OperationId}})
+        {{- end}}
+    })
+    {{- end}}
+    {{end}}
+    ```
+
+    Generated code sample:
+
+    ```golang
+    ...
+
+    type ServerMiddlewareInterface interface {
+      // Provides middlewares for operation definitions tagged by greeting tag.
+      GetGreetingMiddleware() []func(http.Handler) http.Handler
+    }
+
+    ...
+
+    // Operation definitions grouped by greeting tag.
+    r.Group(func(r chi.Router) {
+      if smi != nil {
+        for _, middleware := range smi.GetGreetingMiddleware() {
+          r.Use(middleware)
+        }
+      }
+      r.Post(options.BaseURL+"/api/hello", wrapper.VisitHello)
+    })
+
+    ...
+    ```
   
 ## Using `oapi-codegen`
 
