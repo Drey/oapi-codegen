@@ -1,8 +1,8 @@
-module github.com/deepmap/oapi-codegen/v2/internal/test
+module github.com/Drey/oapi-codegen/v2/internal/test
 
 go 1.20
 
-replace github.com/deepmap/oapi-codegen/v2 => ../../
+replace github.com/Drey/oapi-codegen/v2 => ../../
 
 require (
 	github.com/deepmap/oapi-codegen/v2 v2.0.0-00010101000000-000000000000
