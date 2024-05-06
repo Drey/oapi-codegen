@@ -12,9 +12,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/deepmap/oapi-codegen/v2/examples/petstore-expanded/strict/api"
-	middleware "github.com/oapi-codegen/nethttp-middleware"
+	"github.com/Drey/oapi-codegen/v2/examples/petstore-expanded/strict/api"
 	"github.com/go-chi/chi/v5"
+	middleware "github.com/oapi-codegen/nethttp-middleware"
 )
 
 func main() {

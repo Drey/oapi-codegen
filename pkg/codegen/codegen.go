@@ -33,7 +33,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"golang.org/x/tools/imports"
 
-	"github.com/deepmap/oapi-codegen/v2/pkg/util"
+	"github.com/Drey/oapi-codegen/v2/pkg/util"
 )
 
 // Embed the templates directory
