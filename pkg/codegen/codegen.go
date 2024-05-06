@@ -124,12 +124,23 @@ func Generate(spec *openapi3.T, opts Configuration) (string, error) {
 		globalState.options.OutputOptions.ClientTypeName = defaultClientTypeName
 	}
 
+	ops, err := OperationDefinitions(spec, opts.OutputOptions.InitialismOverrides)
+	if err != nil {
+		return "", fmt.Errorf("error creating operation definitions: %w", err)
+	}
+
+	routerGroups, err := RouterGroups(spec, ops)
+	if err != nil {
+		return "", fmt.Errorf("error creating router groups: %w", err)
+	}
+
 	// This creates the golang templates text package
 	TemplateFunctions["opts"] = func() Configuration { return globalState.options }
+	TemplateFunctions["routerGroups"] = func() []RouterGroup { return routerGroups }
 	t := template.New("oapi-codegen").Funcs(TemplateFunctions)
 	// This parses all of our own template files into the template object
 	// above
-	err := LoadTemplates(templates, t)
+	err = LoadTemplates(templates, t)
 	if err != nil {
 		return "", fmt.Errorf("error parsing oapi-codegen templates: %w", err)
 	}
@@ -147,11 +158,6 @@ func Generate(spec *openapi3.T, opts Configuration) (string, error) {
 		if err != nil {
 			return "", fmt.Errorf("error parsing user-provided template %q: %w", name, err)
 		}
-	}
-
-	ops, err := OperationDefinitions(spec, opts.OutputOptions.InitialismOverrides)
-	if err != nil {
-		return "", fmt.Errorf("error creating operation definitions: %w", err)
 	}
 
 	xGoTypeImports, err := OperationImports(ops)

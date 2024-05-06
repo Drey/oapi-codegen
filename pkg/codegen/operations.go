@@ -222,6 +222,7 @@ type OperationDefinition struct {
 	Summary             string                  // Summary string from Swagger, used to generate a comment
 	Method              string                  // GET, POST, DELETE, etc.
 	Path                string                  // The Swagger path for the operation, like /resource/{id}
+	RouterGroup         *RouterGroup
 	Spec                *openapi3.Operation
 }
 
