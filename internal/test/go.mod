@@ -5,7 +5,7 @@ go 1.20
 replace github.com/Drey/oapi-codegen/v2 => ../../
 
 require (
-	github.com/deepmap/oapi-codegen/v2 v2.0.0-00010101000000-000000000000
+	github.com/Drey/oapi-codegen/v2 v2.0.0-00010101000000-000000000000
 	github.com/getkin/kin-openapi v0.122.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-chi/chi/v5 v5.0.10
